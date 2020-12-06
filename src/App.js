@@ -15,23 +15,23 @@ import Home from './Home';
 function App() {
   return (
     <Router>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+      <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div className="container-fluid">
+          <Link to="/" className="navbar-brand"><img alt="logo" className="logo-nav" src={"/assets/img/logo.png"}/></Link>
+          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-              <li class="nav-item">
+          <div className="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul className="navbar-nav">
+              <li className="nav-item">
               <Link to="/" className="nav-link active" aria-current="page">Início</Link>
                 {/* <a class="nav-link active" aria-current="page" href="#">Início</a> */}
               </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
                   Cadastros
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <li><Link to="/usuarios/" className="dropdown-item">Usuários</Link></li>
                   <li><Link to="/fornecedores/" className="dropdown-item">Fornecedores</Link></li>
                   <li><Link to="/clientes/" className="dropdown-item">Clientes</Link></li>

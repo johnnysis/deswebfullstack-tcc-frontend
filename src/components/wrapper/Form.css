@@ -4,3 +4,7 @@
 .botao-salvar {
     margin-top:10px;
 }
+.botoes-form {
+    display: flex;
+    justify-content: space-between;
+}  

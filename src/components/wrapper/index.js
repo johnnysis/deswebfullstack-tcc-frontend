@@ -1,3 +1,4 @@
 import Form from './Form';
+import ModalExclusao from './ModalExclusao';
 
-export { Form }
+export { Form, ModalExclusao }

@@ -2,7 +2,7 @@ import React from 'react';
 
 const InputButton = (props) => {
     return (
-        <button className="btn btn-primary botao-salvar" type="submit" name="action">{props.buttonName}
+        <button className={`btn ${props.estilo} btn-estilo`} type="button" name="action" onClick={props.handleClick}>{props.buttonName}
             {/* <i className="material-icons right">send</i> */}
         </button>
     )

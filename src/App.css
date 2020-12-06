@@ -1,3 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+body {
+  background-image: url("/assets/img/background.jpg");
+  font-family: 'Open Sans', sans-serif;
+}
+.btn {
+  border-radius: 0px;
+}
+
+.logo-nav {
+  width: 60px;
+  margin: 0;
+}
+.navbar-brand {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.th-opcao {
+  width: 100px;
+}
+
+.table {
+  white-space:nowrap;
+  /* font-size: 13px; */
+}
+
+.btn-circle.btn-xl {
+  width: 100px;
+  height: 100px;
+  padding: 10px 16px;
+  border-radius: 35px;
+  font-size: 24px;
+  line-height: 1.33;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+}
+
+.btn-esquerda {
+  margin-right: 5px;
+}
+
+.btn-estilo {
+  margin-top: 6px;
+}
+
+.lista {
+  margin-top: 50px;
+}
+
+.navbar {
+  margin-top: 50px;
+}
+
+
+.navbar-custom {
+  background-color: #153131;
+  margin: 0;
+}/* change the brand and text color */
+
+.navbar-custom {
+
+}
+
+.button-bottom-align {
+  align-items: flex-end;
+  display: flex; 
+}
+
 /* .App {
   text-align: center;
 }

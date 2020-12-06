@@ -17,6 +17,11 @@ const pointToColon = value => {
         return value.toString().replace('.', ',');
 }
 
+const colonToPoint = value => {
+    if(value)
+        return value.toString().replace(',', '.');
+}
+
 const toCpfFormat = value => {
     if(value === '')
         return '';
@@ -66,7 +71,7 @@ const checkDate = data => {
         return false;
 }
 
-const conteudoAExportar = { toRealFormat, toRealMask, addColon, toCpfFormat, pointToColon, checkDate };
+const conteudoAExportar = { toRealFormat, toRealMask, addColon, toCpfFormat, pointToColon, checkDate, colonToPoint };
 
-export { toRealFormat, toRealMask, addColon, toCpfFormat, pointToColon, checkDate };
+export { toRealFormat, toRealMask, addColon, toCpfFormat, pointToColon, checkDate, colonToPoint };
 export default conteudoAExportar;

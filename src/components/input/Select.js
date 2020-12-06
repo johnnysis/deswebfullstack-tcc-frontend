@@ -3,17 +3,15 @@ import React from 'react';
 //lista de tipo genérico.
 export default (props) => {
 
-    // console.log(props.inputValue !== null && props.inputValue !== undefined ? props.inputValue : '');
     return (
     <div className={`input-field ${props.columnSettings}`}>
-        
-        <select value={!props.inputValue ? props.inputValue : ''} onChange={props.handleChange}>
-            <option value="0" key = "0" disabled>Escolha o {props.labelName}</option>
+        <label htmlFor={props.inputId} className="form-label">{props.labelName}</label>
+        <select id={props.inputId} className="form-select form-control" value={! props.inputValue !== -1 ? props.inputValue : -1} onChange={props.handleChange}>
+            <option value="-1" key = "-1">Selecione</option>
             {props.lista !== undefined && props.lista !== null ?  
-            props.lista.map(e => <option value={e.codigo} key={e.codigo}>{e.descricao}</option>)
+            props.lista.map(e => <option value={e.codigo} key={e.codigo}>{e.descricao ? e.descricao : e.nome}</option>)
             : ''}
             
         </select>
-        <label>{props.labelName}</label>
     </div>);
 }

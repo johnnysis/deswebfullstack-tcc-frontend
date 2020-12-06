@@ -1,7 +1,7 @@
 import React from 'react';
 import CurrencyFormat from 'react-currency-format';
 
-const InputNumber = (props) => {
+const InputCurrency = (props) => {
     return (
         <div className={`${props.columnSettings}`}>
             <label htmlFor={props.inputId} className="form-label">{props.inputName}</label>
@@ -10,12 +10,12 @@ const InputNumber = (props) => {
                 class="form-control"
                 value={props.inputValue}
                 onChange={props.handleChange}
-                maxlength={8}
-                decimalScale={0}
+                decimalSeparator=","
+                decimalScale={2}
                 fixedDecimalScale={true}
                 allowNegative={false}/>
         </div>
     )
 }
 
-export default InputNumber;
+export default InputCurrency;
