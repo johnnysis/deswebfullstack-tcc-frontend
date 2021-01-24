@@ -3,6 +3,8 @@ import axios from 'axios';
 import {url} from '../../util/constants';
 import { ModalExclusao } from '../../components/wrapper';
 import CreateEdit from './CreateEdit';
+import exportToPdf from '../../util/exportToPdf';
+import exportToXlsx from '../../util/exportToXlsx';
 
 class Index extends Component {
     constructor(props) {
@@ -12,6 +14,8 @@ class Index extends Component {
         this.remove = this.remove.bind(this);
         this.confirmaRemocao = this.confirmaRemocao.bind(this);
         this.zerarCodigo = this.zerarCodigo.bind(this);
+        this.exportToPdf = this.exportToPdf.bind(this);
+        this.exportToXlsx = this.exportToXlsx.bind(this);
     }
     componentWillMount() {
         this.refreshClientes();   
@@ -23,6 +27,36 @@ class Index extends Component {
                 this.setState({lista: response.data});
             });
     }
+    getArrayDeDados() {
+        let arrData = [];
+        
+        for(let data of this.state.lista)
+            arrData.push([data.codigo.toString().toUpperCase(),
+                data.nome.toUpperCase(),
+                data.cpf.toUpperCase(),
+                data.email.toUpperCase(),
+                data.cidade.nome.toUpperCase(),
+                data.cidade.estado.descricao.toUpperCase(),
+                data.cep.toUpperCase(),
+                data.logradouro.toUpperCase(),
+                data.numero.toUpperCase(),
+                data.bairro.toUpperCase()
+            ]);
+        return arrData;
+    }
+    exportToPdf() {
+        let columns = ['Código', 'Nome', 'CPF', 'Email', 'Cidade', 'Estado', 'CEP', 'Logradouro',
+                    'Número', 'Bairro'];
+
+        exportToPdf(columns, this.getArrayDeDados(), 'Clientes', 9, 'Clientes.pdf');
+    }
+    exportToXlsx() {
+        let columns = ['Código', 'Nome', 'CPF', 'Email', 'Cidade', 'Estado', 'CEP', 'Logradouro',
+        'Número', 'Bairro'];
+
+        exportToXlsx(columns, this.getArrayDeDados(), 'Clientes.xlsx');
+    }
+
     zerarCodigo() {
         this.setState({codigo: 0, editando: false});
     }
@@ -96,6 +130,13 @@ class Index extends Component {
                                         </tr>))}
                                     </tbody>
                                 </table>
+
+                                <button type="button" className="btn btn-danger mb-1" onClick={this.exportToPdf}>
+                                    <i className="fa fa-file-pdf-o"></i> PDF
+                                </button>
+                                <button type="button" className="btn btn-success mx-1 mb-1" onClick={this.exportToXlsx}>
+                                    <i className="fa fa-file-excel-o"></i> Excel
+                                </button>
                             </div>
                         </div>
                     </div>

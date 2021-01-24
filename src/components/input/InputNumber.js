@@ -10,7 +10,7 @@ const InputNumber = (props) => {
                 class="form-control"
                 value={props.inputValue}
                 onChange={props.handleChange}
-                maxlength={8}
+                maxLength={8}
                 decimalScale={0}
                 fixedDecimalScale={true}
                 allowNegative={false}/>

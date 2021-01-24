@@ -1,26 +1,47 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {url} from '../../util/constants';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+
+import { url } from '../../util/constants';
 import CreateEdit from './CreateEdit';
 import { ModalExclusao } from '../../components/wrapper';
-
-// import {pointToColon} from '..//util/conversor';
+import exportToPdf from '../../util/exportToPdf';
+import exportToXlsx from '../../util/exportToXlsx';
 
 class Index extends Component {
     constructor(props) {
         super(props);
-
         this.state = {lista: [], codigo: 0, exibeModal: false, editando: false};
         this.edit = this.edit.bind(this);
         this.remove = this.remove.bind(this);
         this.confirmaRemocao = this.confirmaRemocao.bind(this);
         this.zerarCodigo = this.zerarCodigo.bind(this);
+        this.exportToPdf = this.exportToPdf.bind(this);
+        this.exportToXlsx = this.exportToXlsx.bind(this);
+        this.getArrayDeDados = this.getArrayDeDados.bind(this);
     }
     componentWillMount() {
         this.refreshCategorias();   
         
     }
+
+    getArrayDeDados() {
+        let arrData = [];
+        for(let data of this.state.lista)
+            arrData.push([data.codigo.toString().toUpperCase(), data.descricao.toUpperCase()]);
+        
+        return arrData;
+    }
+    exportToPdf() {
+        let columns = ['Código', 'Descrição'];
+
+        exportToPdf(columns, this.getArrayDeDados(), 'Categorias', 12, 'Categorias.pdf');
+    }
+    exportToXlsx() {        
+        let columns = ['Código', 'Descrição'];
+
+        exportToXlsx(columns, this.getArrayDeDados(), 'Categorias.xlsx');
+    }
+
     refreshCategorias() {
         axios.get(`${url}/categorias`)
             .then(response => {
@@ -61,7 +82,6 @@ class Index extends Component {
                         <div className="card bg-light mb-6">
                             <div className="card-header">Lista de categorias</div>
                             <div className="card-body">
-                        
                                 <table className='table table-bordered'>
                                     <thead className="table-light">
                                         <tr>
@@ -86,6 +106,13 @@ class Index extends Component {
                                         </tr>))}
                                     </tbody>
                                 </table>
+
+                                <button type="button" className="btn btn-danger mb-1" onClick={this.exportToPdf}>
+                                    <i className="fa fa-file-pdf-o"></i> PDF
+                                </button>
+                                <button type="button" className="btn btn-success mx-1 mb-1" onClick={this.exportToXlsx}>
+                                    <i className="fa fa-file-excel-o"></i> Excel
+                                </button>
                             </div>
                         </div>
                     </div>

@@ -3,16 +3,21 @@ import axios from 'axios';
 import {url} from '../../util/constants';
 import CreateEdit from './CreateEdit';
 import { ModalExclusao } from '../../components/wrapper';
+import exportToPdf from '../../util/exportToPdf';
+import exportToXlsx from '../../util/exportToXlsx';
 
 class Index extends Component {
     constructor(props) {
         super(props);
-
+        
         this.state = {lista: [], codigo: 0, exibeModal: false, editando: false};
         this.edit = this.edit.bind(this);
         this.remove = this.remove.bind(this);
         this.confirmaRemocao = this.confirmaRemocao.bind(this);
         this.zerarCodigo = this.zerarCodigo.bind(this);
+        this.exportToPdf = this.exportToPdf.bind(this);
+        this.exportToXlsx = this.exportToXlsx.bind(this);
+        this.getArrayDeDados = this.getArrayDeDados.bind(this);
     }
     componentWillMount() {
         this.refreshProdutos();   
@@ -33,6 +38,27 @@ class Index extends Component {
     remove(codigo) {
         // console.log(codigo);
         this.setState({codigo});
+    }
+    getArrayDeDados() {
+        let arrData = [];
+        for(let data of this.state.lista) {
+            arrData.push([data.codigo,
+                data.descricao.toUpperCase(),
+                data.categoria.descricao.toUpperCase(),
+                data.quantidade,
+                data.preco.toLocaleString("pt-BR", {minimumFractionDigits: 2})
+            ]);
+        }
+
+        return arrData;
+    }
+    exportToPdf() {
+        let columns = ['Código', 'Descrição', 'Categoria', 'Quantidade', 'Preço (R$)'];
+        exportToPdf(columns, this.getArrayDeDados(), 'Produtos', 12, 'Produtos.pdf');
+    }
+    exportToXlsx() {
+        let columns = ['Código', 'Descrição', 'Categoria', 'Quantidade', 'Preço (R$)'];
+        exportToXlsx(columns, this.getArrayDeDados(), 'Produtos.xlsx');
     }
     confirmaRemocao(codigo) {
         if(codigo)
@@ -65,7 +91,7 @@ class Index extends Component {
                                         <th>Descrição</th>
                                         <th>Categoria</th>
                                         <th>Quantidade</th>
-                                        <th>Preço</th>
+                                        <th>Preço (R$)</th>
                                         <th>Opção</th>
                                     </tr>
                                     </thead>
@@ -88,6 +114,13 @@ class Index extends Component {
                                         </tr>))}
                                     </tbody>
                                 </table>
+
+                                <button type="button" className="btn btn-danger mb-1" onClick={this.exportToPdf}>
+                                    <i className="fa fa-file-pdf-o"></i> PDF
+                                </button>
+                                <button type="button" className="btn btn-success mx-1 mb-1" onClick={this.exportToXlsx}>
+                                    <i className="fa fa-file-excel-o"></i> Excel
+                                </button>
                             </div>
                         </div>
                     </div>

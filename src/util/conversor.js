@@ -46,32 +46,8 @@ const toCpfFormat = value => {
     }
     return strResultante;
 }
-const checkDate = data => {
-    if(data) {
-        var objData = new Date(data);
-        if(objData) {
-            // alert(data);
-            var day = objData.getUTCDate();
-            // alert(day);
-            var month = objData.getUTCMonth()+1;
-            // alert(month);
-            var year = objData.getUTCFullYear();
-            // alert(year);
 
-            return true;
-            // if(year < 1910 || year > 2030)
-            //     return false;
-            // else
-            //     return true;
-        }
-        else
-            return false;
-    }
-    else
-        return false;
-}
+const conteudoAExportar = { toRealFormat, toRealMask, addColon, toCpfFormat, pointToColon, colonToPoint };
 
-const conteudoAExportar = { toRealFormat, toRealMask, addColon, toCpfFormat, pointToColon, checkDate, colonToPoint };
-
-export { toRealFormat, toRealMask, addColon, toCpfFormat, pointToColon, checkDate, colonToPoint };
+export { toRealFormat, toRealMask, addColon, toCpfFormat, pointToColon, colonToPoint };
 export default conteudoAExportar;

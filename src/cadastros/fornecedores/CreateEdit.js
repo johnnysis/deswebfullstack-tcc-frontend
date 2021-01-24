@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {url} from '../../util/constants';
-import {colonToPoint} from '../../util/conversor';
 import { Input, InputCep, Select, InputCnpj } from '../../components/input';
 import { Form } from '../../components/wrapper';
 
