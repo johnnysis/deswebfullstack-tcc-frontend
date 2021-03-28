@@ -3,6 +3,7 @@ import axios from 'axios';
 import {url} from '../../util/constants';
 import { Input, InputCep, Select } from '../../components/input';
 import { Form } from '../../components/wrapper';
+import InputPassword from '../../components/input/InputPassword';
 
 const CreateEdit = (props) => {
     const [nome, setNome] = useState('');
@@ -155,7 +156,7 @@ const CreateEdit = (props) => {
                         handleChange={e => handleChangeDefault(e, setLogin)}
                         validate={true}
                     />
-                    <Input 
+                    <InputPassword
                         inputName="Senha"
                         inputId="senha"
                         inputValue={senha}

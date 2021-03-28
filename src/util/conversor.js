@@ -1,5 +1,4 @@
 const toRealFormat = value => {
-    // value = addColon(value);
     return !value ? '' : value.toFixed(2).replace('.', ',');
 }
 

@@ -4,6 +4,7 @@ import {url} from '../../util/constants';
 import Messages from '../../components/message/Messages';
 import EtapaSelecionarFornecedor from './EtapaSelecionarFornecedor';
 import EtapaSelecionarProdutos from './EtapaSelecionarProdutos';
+import EtapaCancelarCompra from './EtapaCancelarCompra';
 import { Link } from 'react-router-dom';
 
 const CreateEdit = () => {
@@ -15,6 +16,10 @@ const CreateEdit = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [selectedCodigoFornecedor, setSelectedCodigoFornecedor] = useState(0);
     
+    const refresh = () => {
+        setSuccessMessage('');
+        setSelectedCodigoFornecedor(0);
+    }
     const finalizar = async () => {
         try {
             if(!produtosAdicionados || produtosAdicionados.length === 0)
@@ -73,6 +78,10 @@ const CreateEdit = () => {
                 finalizar={finalizar}
                 failureMessageFinalizacao={failureMessage}
             />
+            <EtapaCancelarCompra
+                selectedCodigoFornecedor={selectedCodigoFornecedor}
+                setSuccessMessage={setSuccessMessage}
+            />
         </>
         ) : ""}
 
@@ -85,7 +94,7 @@ const CreateEdit = () => {
                             <div className="card-body">
                                 <Messages successMessage={successMessage}/>
                                 <div className="list-group">
-                                    <Link to="/compra/" class="list-group-item list-group-item-action link-info">Nova compra</Link>
+                                    <Link to="/compra/" onClick={refresh} class="list-group-item list-group-item-action link-info">Nova compra</Link>
                                     <Link to="/" class="list-group-item list-group-item-action link-info">Retornar à pagina inicial</Link>
                                 </div>
                             </div>

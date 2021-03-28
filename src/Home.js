@@ -24,20 +24,43 @@ class Home extends Component {
         this.labelsMeses = this.labelsMeses.bind(this);
         this.labelsCategorias = this.labelsCategorias.bind(this);
         this.gerarRelatorio = this.gerarRelatorio.bind(this);
+        this.handleChangeSelect = this.handleChangeSelect.bind(this);
     }
     
-    gerarRelatorio() {
-        const urlRelatorio = tiposGraficos.find(el => el.codigo === this.state.tipoGrafico).url;
-        console.log(urlRelatorio);
-        console.log(this.state.tipoGrafico);
+    validaInput() {
+        this.setState({failureMessage: ''});
+        let erro = true;
+        const { tipoGrafico } = this.state;
+        
+        console.log(this.state.ano);
+        if(tipoGrafico === 0)
+            this.setState({failureMessage: 'Selecione primeiramente um tipo de gráfico.'});
+        else
+        if((this.state.tipoGrafico === enumTiposGraficos.COMPRASMENSAISNOANO ||
+            this.state.tipoGrafico === enumTiposGraficos.VENDASFEITASPAGAS ||
+            this.state.tipoGrafico === enumTiposGraficos.VENDASMENSAISNOANO) && 
+            (isNaN(this.state.ano) || this.state.ano === ""))
+            this.setState({failureMessage: 'Insira um ano válido.'});
+        else
+            erro = false;
 
-        Axios.get(`${url}${urlRelatorio}?ano=${this.state.ano}`).then(result => {
-            console.log(result.data);
-            console.log('')
-            this.montarGrafico(result.data);
-        }).catch(err => {
-            this.setState({failureMessage: 'Erro ao exibir gráfico'});
-        });
+        return erro;
+    }
+
+    gerarRelatorio() {
+        if(!this.validaInput()) {
+            const urlRelatorio = tiposGraficos.find(el => el.codigo === this.state.tipoGrafico).url;
+            console.log(urlRelatorio);
+            console.log(this.state.tipoGrafico);
+
+            Axios.get(`${url}${urlRelatorio}?ano=${this.state.ano}`).then(result => {
+                console.log(result.data);
+                console.log('')
+                this.montarGrafico(result.data);
+            }).catch(err => {
+                this.setState({failureMessage: 'Erro ao exibir gráfico'});
+            });
+        }
     }
     labelsMeses() {
         return ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
@@ -126,7 +149,10 @@ class Home extends Component {
             this.state.currentChart.destroy();
         this.setState({currentChart: chart})
     }
-
+    handleChangeSelect(e) {
+        this.setState({failureMessage: ''});
+        this.setState({tipoGrafico: parseInt(e.target.value)});
+    }
     componentDidMount() {
     }
     
@@ -144,7 +170,7 @@ class Home extends Component {
                                     inputId="tipografico"
                                     labelName="Tipo de gráfico"
                                     inputValue={this.state.tipoGrafico}
-                                    handleChange={e => this.setState({tipoGrafico: parseInt(e.target.value)})}
+                                    handleChange={e => this.handleChangeSelect(e)}
                                     lista={ tiposGraficos }
                                 />
                                 {(
@@ -162,7 +188,7 @@ class Home extends Component {
                                 ) : ""}
                                 
                             </div>
-                            {/* <FailureMessage failureMessage={this.state.failureMessage}/> */}
+                            <Messages failureMessage={this.state.failureMessage}/>
                             <div className="botoes-form">
                                 <InputButton buttonName="Gerar gráfico" estilo="btn-primary" handleClick={this.gerarRelatorio}/>
                             </div>

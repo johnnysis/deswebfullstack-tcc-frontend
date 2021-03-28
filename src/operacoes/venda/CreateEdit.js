@@ -4,7 +4,9 @@ import {url} from '../../util/constants';
 import Messages from '../../components/message/Messages';
 import EtapaSelecionarCliente from './EtapaSelecionarCliente';
 import EtapaSelecionarProdutos from './EtapaSelecionarProdutos';
+import EtapaCancelarVenda from './EtapaCancelarVenda';
 import { Link } from 'react-router-dom';
+import { InputButton } from '../../components/input';
 
 const CreateEdit = () => {
     
@@ -15,6 +17,7 @@ const CreateEdit = () => {
     const [failureMessage, setFailureMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [selectedCodigoCliente, setSelectedCodigoCliente] = useState(0);
+    const [cancelarOuCriarVenda, setCancelarOuCriarVenda] = useState(false);
     
     const finalizar = async () => {
         try {
@@ -44,6 +47,11 @@ const CreateEdit = () => {
         }
     }
 
+    const refresh = () => {
+        setSuccessMessage('');
+        setSelectedCodigoCliente(0);
+    }
+
     useEffect(() => {
         if(selectedCodigoCliente)
             axios.get(`${url}/produtos`)
@@ -52,7 +60,7 @@ const CreateEdit = () => {
                         setProdutos(res.data);
                     },
                     err => console.log(err));
-
+            
     }, [selectedCodigoCliente]);
 
     return (<>
@@ -78,6 +86,10 @@ const CreateEdit = () => {
                 finalizar={finalizar}
                 failureMessageFinalizacao={failureMessage}
             />
+            <EtapaCancelarVenda
+                selectedCodigoCliente={selectedCodigoCliente}
+                setSuccessMessage={setSuccessMessage}
+            />
         </>
         ) : ""}
 
@@ -90,7 +102,7 @@ const CreateEdit = () => {
                             <div className="card-body">
                                 <Messages successMessage={successMessage}/>
                                 <div className="list-group">
-                                    <Link to="/venda/" class="list-group-item list-group-item-action link-info">Nova venda</Link>
+                                    <Link to="/venda/" onClick={refresh} class="list-group-item list-group-item-action link-info">Nova venda</Link>
                                     <Link to="/" class="list-group-item list-group-item-action link-info">Retornar à pagina inicial</Link>
                                 </div>
                             </div>

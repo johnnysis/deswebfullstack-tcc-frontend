@@ -6,7 +6,7 @@ import { Form } from '../../components/wrapper';
 
 const CreateEdit = (props) => {
     const [razaoSocial, setRazaoSocial] = useState('');
-    const [nome, setNome] = useState('');
+    const [nomeFantasia, setNomeFantasia] = useState('');
     const [codigoCidade, setCodigoCidade] = useState('');
     const [codigoEstado, setCodigoEstado] = useState('');
     const [logradouro, setLogradouro] = useState('');
@@ -45,7 +45,7 @@ const CreateEdit = (props) => {
         if(codigoCidade === -1)
             messages.push('Cidade');
 
-        if(!nome)
+        if(!nomeFantasia)
             messages.push('Nome Fantasia');
         if(!razaoSocial)
             messages.push('Razão Social');
@@ -74,7 +74,7 @@ const CreateEdit = (props) => {
             setMessagesList([]);
             let codigo = props.codigo && props.editando ? props.codigo : 0;
             axios.post(`${url}/fornecedores/create`,
-                    {codigo, nome, razaoSocial, codigoCidade, codigoEstado, logradouro,
+                    {codigo, nomeFantasia, razaoSocial, codigoCidade, codigoEstado, logradouro,
                     bairro, numero, cep, email, cnpj}
                 )
             .then(
@@ -97,7 +97,7 @@ const CreateEdit = (props) => {
 
     const limpar = () => {
         props.zerarCodigo();
-        setNome('');
+        setNomeFantasia('');
         setLogradouro('');
         setBairro('');
         setNumero('');
@@ -116,7 +116,7 @@ const CreateEdit = (props) => {
             axios.get(`${url}/fornecedores/${props.codigo}`)
             .then(async response => {
                 if(response.status !== 500) {
-                    setNome(response.data.nome);
+                    setNomeFantasia(response.data.nomeFantasia);
                     setRazaoSocial(response.data.razaoSocial);
                     setLogradouro(response.data.logradouro);
                     setBairro(response.data.bairro);
@@ -131,7 +131,7 @@ const CreateEdit = (props) => {
                 }
             });
         else {
-            setNome('');
+            setNomeFantasia('');
         }
     }, [props.codigo, props.editando]);
     
@@ -154,9 +154,9 @@ const CreateEdit = (props) => {
                     <Input 
                         inputName="Nome Fantasia"
                         inputId="nome"
-                        inputValue={nome}
+                        inputValue={nomeFantasia}
                         columnSettings="col-sm-6"
-                        handleChange={e => handleChangeDefault(e, setNome)}
+                        handleChange={e => handleChangeDefault(e, setNomeFantasia)}
                         validate={true}
                     />
                     <Input 

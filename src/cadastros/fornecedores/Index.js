@@ -5,12 +5,13 @@ import CreateEdit from './CreateEdit';
 import { ModalExclusao } from '../../components/wrapper';
 import exportToPdf from '../../util/exportToPdf';
 import exportToXlsx from '../../util/exportToXlsx';
+import Messages from '../../components/message/Messages';
 
 class Index extends Component {
     constructor(props) {
         super(props);
         
-        this.state = {lista: [], codigo: 0, exibeModal: false, editando: false};
+        this.state = {lista: [], codigo: 0, exibeModal: false, editando: false, failureMessage: ''};
         this.edit = this.edit.bind(this);
         this.remove = this.remove.bind(this);
         this.confirmaRemocao = this.confirmaRemocao.bind(this);
@@ -73,7 +74,7 @@ class Index extends Component {
             axios.delete(`${url}/fornecedores/${codigo}`).then(() => {
                 this.refreshFornecedores();
                 this.zerarCodigo();
-            }, (err) => console.log(err));
+            }, (err) => this.setState({failureMessage: err.response.data.erro }));
     }
     render() {
         return (
@@ -91,11 +92,13 @@ class Index extends Component {
                         <div className="card bg-light mb-6">
                             <div className="card-header">Lista de fornecedores</div>
                             <div className="card-body table-responsive">
+                                <Messages failureMessage={this.state.failureMessage}/>
                                 <table className='table table-striped'>
                                     <thead class="table-light">
                                         <tr>
                                             <th>Código</th>
-                                            <th>Nome</th>
+                                            <th>Nome Fantasia</th>
+                                            <th>Razão Social</th>
                                             <th>Cidade</th>
                                             <th>Estado</th>
                                             <th>Logradouro</th>
@@ -104,8 +107,7 @@ class Index extends Component {
                                             <th>CEP</th>
                                             <th>E-mail</th>
                                             <th>Cnpj</th>
-                                            <th>Razão Social</th>
-                                            <th>Nome Fantasia</th>
+                                            
                                             <th class="th-opcao">Opção</th>
                                         </tr>
                                     </thead>
@@ -113,6 +115,8 @@ class Index extends Component {
                                         {this.state.lista.map(el => (
                                         <tr key={el.codigo}>
                                             <th scope="row">{el.codigo}</th>
+                                            <td>{el.nomeFantasia}</td>
+                                            <td>{el.razaoSocial}</td>
                                             <td>{el.nome}</td>
                                             <td>{el.cidade.nome}</td>
                                             <td>{el.cidade.estado.descricao}</td>
@@ -122,8 +126,7 @@ class Index extends Component {
                                             <td>{el.cep}</td>
                                             <td>{el.email}</td>
                                             <td>{el.cnpj}</td>
-                                            <td>{el.razaoSocial}</td>
-                                            <td>{el.nomeFantasia}</td>
+                                            
                                             <td>
                                                 <button type="button" className="btn btn-info btn-circle btn-esquerda"
                                                     onClick={() => this.edit(el.codigo)}><i className="fa fa-pencil"></i></button>

@@ -5,11 +5,12 @@ import { ModalExclusao } from '../../components/wrapper';
 import CreateEdit from './CreateEdit';
 import exportToPdf from '../../util/exportToPdf';
 import exportToXlsx from '../../util/exportToXlsx';
+import Messages from '../../components/message/Messages';
 
 class Index extends Component {
     constructor(props) {
         super(props);
-        this.state = {lista: [], codigo: 0, exibeModal: false, editando: false};
+        this.state = {lista: [], codigo: 0, exibeModal: false, editando: false, failureMessage: ''};
         this.edit = this.edit.bind(this);
         this.remove = this.remove.bind(this);
         this.confirmaRemocao = this.confirmaRemocao.bind(this);
@@ -67,11 +68,12 @@ class Index extends Component {
         this.setState({codigo});
     }
     confirmaRemocao(codigo) {
+        this.setState({failureMessage: ''});
         if(codigo)
             axios.delete(`${url}/clientes/${codigo}`).then(() => {
                 this.refreshClientes();
                 this.zerarCodigo();
-            }, (err) => console.log(err));
+            }, (err) => this.setState({failureMessage: 'Erro ao excluir cliente.' }));
     }
     
     render() {
@@ -90,6 +92,7 @@ class Index extends Component {
                         <div className="card bg-light mb-6">
                             <div className="card-header">Lista de clientes</div>
                             <div className="card-body table-responsive">
+                                <Messages failureMessage={this.state.failureMessage}/>
                                 <table className='table table-bordered'>
                                     <thead class="table-light">
                                         <tr>

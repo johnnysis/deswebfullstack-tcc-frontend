@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Input, InputButton, InputNumber } from '../../components/input';
+import { Input, InputButton, InputCurrency, InputNumber } from '../../components/input';
 import Messages from '../../components/message/Messages';
 import FormPesquisa from '../../components/wrapper/FormPesquisa';
 import ModalConfirmacao from '../../components/wrapper/ModalConfirmacao';
@@ -11,6 +11,7 @@ const EtapaSelecionarProdutos = (props) => {
     const [descricaoProduto, setDescricaoProduto] = useState('');
     const [produtos, setProdutos] = useState(props.produtos);
     const [quantidade, setQuantidade] = useState('');
+    const [valorUnitario, setValorUnitario] = useState('');
     const [selectedCodigoProduto, setSelectedCodigoProduto] = useState(0);
     const [selectedCodigoProdutoAdicionado, setSelectedCodigoProdutoAdicionado] = useState(0);
     const [failureMessagePesquisa, setFailureMessagePesquisa] = useState('');
@@ -40,6 +41,7 @@ const EtapaSelecionarProdutos = (props) => {
 
     const adicionar = () => {
         let produto = produtos.find(el => el.codigo === selectedCodigoProduto);
+        let precoUntAux = valorUnitario;
         let auxProdutosAdicionados = props.produtosAdicionados.map(el => el);
         let produtoAdicionado = auxProdutosAdicionados.find(el => el.codigo === selectedCodigoProduto);
         
@@ -49,17 +51,26 @@ const EtapaSelecionarProdutos = (props) => {
             setFailureMessageAdicao('Insira uma quantidade válida.');
             return;
         }
+        if(!precoUntAux || parseInt(precoUntAux) <= 0) {
+            setFailureMessageAdicao('Insira um preço unitário válido.');
+            return;
+        }
+        else
+            precoUntAux = precoUntAux.replace(",", ".");
+
         if(!selectedCodigoProduto) {
             setFailureMessageAdicao('Selecione um produto.');
             return;
         }
         if(produtoAdicionado) {
             produtoAdicionado.quantidade = parseInt(produtoAdicionado.quantidade) + parseInt(quantidade);
-            produtoAdicionado.preco = produtoAdicionado.quantidade * produto.preco;
+            produtoAdicionado.preco = produtoAdicionado.quantidade * precoUntAux;
+            produtoAdicionado.valorUnitario = precoUntAux;
             props.setProdutosAdicionados(auxProdutosAdicionados);
         }
         else {
-            auxProdutosAdicionados = [...props.produtosAdicionados, { ...produto, quantidade: quantidade, preco: quantidade * produto.preco }];
+            console.log(valorUnitario);
+            auxProdutosAdicionados = [...props.produtosAdicionados, { ...produto, quantidade: quantidade, preco: quantidade * precoUntAux, valorUnitario: precoUntAux }];
             props.setProdutosAdicionados(auxProdutosAdicionados);
         }
         
@@ -129,7 +140,6 @@ const EtapaSelecionarProdutos = (props) => {
                                             <tr>
                                                 <th>Código</th>
                                                 <th>Descrição</th>
-                                                <th>Preço Unit. (R$)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -137,20 +147,29 @@ const EtapaSelecionarProdutos = (props) => {
                                             <tr className={`row-select ${el.codigo === selectedCodigoProduto ? "row-selected": ""}`} key={el.codigo} onClick={() => setSelectedCodigoProduto(el.codigo)}>
                                                 <th scope="row">{el.codigo}</th>
                                                 <td>{el.descricao}</td>
-                                                <td>{toRealFormat(el.preco)}</td>
                                             </tr>))}
                                         </tbody>
                                     </table>
                                 </div>
                                 <Messages failureMessage={failureMessageAdicao} />
-                                <InputNumber 
-                                    inputName="Quantidade"
-                                    inputId="quantidade"
-                                    inputValue={quantidade}
-                                    columnSettings="col-sm-2"
-                                    handleChange={e => setQuantidade(e.target.value)}
-                                    validate={true}
-                                />
+                                <div className="row">
+                                    <InputNumber 
+                                        inputName="Quantidade"
+                                        inputId="quantidade"
+                                        inputValue={quantidade}
+                                        columnSettings="col-sm-12 col-md-4"
+                                        handleChange={e => setQuantidade(e.target.value)}
+                                        validate={true}
+                                    />
+                                    <InputCurrency 
+                                        inputName="Valor unitário"
+                                        inputId="valorUnitario"
+                                        inputValue={valorUnitario}
+                                        columnSettings="col-sm-12 col-md-4"
+                                        handleChange={e => setValorUnitario(e.target.value)}
+                                        validate={true}
+                                    />
+                                </div>
                                 <div className="botoes-form">
                                     <InputButton buttonName="Adicionar" estilo="btn-primary" handleClick={adicionar}/>
                                 </div>
@@ -174,7 +193,7 @@ const EtapaSelecionarProdutos = (props) => {
                                                 <th>Código</th>
                                                 <th>Descrição</th>
                                                 <th>Quantidade</th>
-                                                <th>Preço (R$)</th>
+                                                <th>Preço Total(R$)</th>
                                             </tr>
                                         </thead>
                                         <tbody>

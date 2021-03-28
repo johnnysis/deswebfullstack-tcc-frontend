@@ -11,6 +11,7 @@ const CreateEdit = () => {
     const [listaVendas, setListaVendas] = useState([]);
     const [formasPagamento, setFormasPagamento] = useState([]);
     const [codigoVenda, setCodigoVenda] = useState(0);
+    const [codigoVendaEstorno, setCodigoVendaEstorno] = useState(0);
     const [codigoFormaPagamento, setCodigoFormaPagamento] = useState([]);
     const [failureMessage, setFailureMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -36,20 +37,39 @@ const CreateEdit = () => {
         }
     }
 
+    const refresh = () => {
+        setSuccessMessage('');
+        setSelectedCodigoCliente(0);
+    }
+
     const selectPagar = (codigoVenda) => {
-        
-            axios.get(`${url}/formasPagamento`).then(response => {
-                setCodigoVenda(codigoVenda);
-                setFormasPagamento(response.data);
-            }).catch(err => {
-                setFailureMessage('Erro ao listar formas de pagamento disponíveis.');
-                console.log(err.message);
-            })
-        
+        axios.get(`${url}/formasPagamento`).then(response => {
+            setCodigoVenda(codigoVenda);
+            setFormasPagamento(response.data);
+        }).catch(err => {
+            setFailureMessage('Erro ao listar formas de pagamento disponíveis.');
+            console.log(err.message);
+        });
     }
 
     const estornar = async () => {
-
+        try {
+            if(codigoVendaEstorno > 0) {
+                axios.post(`${url}/vendas/estornarPagamento?`, {
+                    codigoVenda: codigoVendaEstorno
+                }).then(() => {
+                    setSuccessMessage('Pagamento estornado com sucesso.');
+                    setCodigoVenda(0);
+                    setListaVendas([]);
+                })
+            }
+            else
+                setFailureMessage('Código da venda não informado.');
+        }
+        catch(err) {
+            console.log(err);
+            setFailureMessage('Erro ao realizar pagamento.');
+        }
     }
 
     useEffect(() => {
@@ -69,6 +89,11 @@ const CreateEdit = () => {
                 setSelectedCodigoCliente={setSelectedCodigoCliente}
             />
         ) : ""}
+
+        <ModalConfirmacao
+            id="modal-estornos"
+            handleClick={estornar}
+        />
         {listaVendas.length > 0 && codigoVenda === 0 ? (<>
             {/* <ModalConfirmacao
                 id="modal-pagar"
@@ -108,7 +133,7 @@ const CreateEdit = () => {
                                                     (
                                                         <button type="button" className="btn btn-danger"
                                                             data-toggle="modal" data-target="#modal-estornos"
-                                                            onClick={() => setCodigoVenda(el.codigo)}
+                                                            onClick={() => setCodigoVendaEstorno(el.codigo)}
                                                         >Estornar</button>
                                                     )
                                                 }
@@ -161,7 +186,7 @@ const CreateEdit = () => {
                     <div className="card-body">
                         <Messages successMessage={successMessage}/>
                         <div className="list-group">
-                            <Link to="/pagamento/" class="list-group-item list-group-item-action link-info">Novo pagamento</Link>
+                            <Link to="/pagamento/" onClick={refresh} class="list-group-item list-group-item-action link-info">Novo pagamento</Link>
                             <Link to="/" class="list-group-item list-group-item-action link-info">Retornar à pagina inicial</Link>
                         </div>
                     </div>

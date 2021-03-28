@@ -5,6 +5,7 @@ import { ModalExclusao } from '../../components/wrapper';
 import CreateEdit from './CreateEdit';
 import exportToPdf from '../../util/exportToPdf';
 import exportToXlsx from '../../util/exportToXlsx';
+import Messages from '../../components/message/Messages';
 
 // import {pointToColon} from '..//util/conversor';
 
@@ -12,7 +13,7 @@ class Index extends Component {
     constructor(props) {
         super(props);
         
-        this.state = {lista: [], codigo: 0, exibeModal: false, editando: false};
+        this.state = {lista: [], codigo: 0, exibeModal: false, editando: false, failureMessage: ''};
         this.edit = this.edit.bind(this);
         this.remove = this.remove.bind(this);
         this.confirmaRemocao = this.confirmaRemocao.bind(this);
@@ -75,7 +76,7 @@ class Index extends Component {
             axios.delete(`${url}/usuarios/${codigo}`).then(() => {
                 this.refreshUsuarios();
                 this.zerarCodigo();
-            }, (err) => console.log(err));
+            }, (err) => this.setState({failureMessage: "Erro ao excluir categoria." }));
     }
     render() {
         return (
@@ -93,6 +94,7 @@ class Index extends Component {
                         <div className="card bg-light mb-6">
                             <div className="card-header">Lista de usuários</div>
                             <div className="card-body table-responsive">
+                                <Messages failureMessage={this.state.failureMessage}/>
                                 <table className='table table-bordered'>
                                     <thead class="table-light">
                                         <tr>
