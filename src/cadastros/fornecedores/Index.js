@@ -117,7 +117,6 @@ class Index extends Component {
                                             <th scope="row">{el.codigo}</th>
                                             <td>{el.nomeFantasia}</td>
                                             <td>{el.razaoSocial}</td>
-                                            <td>{el.nome}</td>
                                             <td>{el.cidade.nome}</td>
                                             <td>{el.cidade.estado.descricao}</td>
                                             <td>{el.logradouro}</td>
