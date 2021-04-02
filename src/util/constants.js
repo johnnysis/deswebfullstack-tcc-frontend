@@ -1,4 +1,4 @@
-const url = "https://deswebfullstack-server.herokuapp.com";
+export const url = "https://deswebfullstack-server.herokuapp.com";
 
 // export const url = Object.freeze("http://192.168.0.10:5000");
 export const formTypes = Object.freeze({
